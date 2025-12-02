@@ -1,0 +1,61 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: visus_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-visus}
+      POSTGRES_USER: ${POSTGRES_USER:-visus}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-visus}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    container_name: visus_backend
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-visus}:${POSTGRES_PASSWORD:-visus}@db:5432/${POSTGRES_DB:-visus}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:5173,http://localhost:4173}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+      STORAGE_MODE: ${STORAGE_MODE:-local}
+      LOCAL_STORAGE_PATH: ${LOCAL_STORAGE_PATH:-/app/storage}
+      LOCAL_PUBLIC_URL: ${LOCAL_PUBLIC_URL:-http://localhost:8080/media}
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./storage:/app/storage
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - VITE_API_URL=${VITE_API_URL:-http://backend:8080/api}
+        - VITE_MEDIA_URL=${VITE_MEDIA_URL:-http://backend:8080/media}
+    container_name: visus_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://backend:8080/api}
+      VITE_MEDIA_URL: ${VITE_MEDIA_URL:-http://backend:8080/media}
+    ports:
+      - "5173:80"
+      - "80:80"
+
+  adminer:
+    image: adminer:4.8.1
+    container_name: visus_adminer
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "8081:8080"
+
+volumes:
+  db_data:
