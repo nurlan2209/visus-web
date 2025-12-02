@@ -33,9 +33,9 @@ function App() {
       <Header onBook={openBooking} />
       <main>
         <Hero onBook={openBooking} />
-        <About />
+        <About apiBaseUrl={API_BASE_URL} />
         <Services />
-        <Diagnostics />
+        <Diagnostics apiBaseUrl={API_BASE_URL} />
         <Doctors apiBaseUrl={API_BASE_URL} />
         <Gallery onBook={openBooking} />
         <Reviews apiBaseUrl={API_BASE_URL} />

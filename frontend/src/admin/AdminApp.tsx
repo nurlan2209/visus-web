@@ -203,6 +203,17 @@ export function AdminApp() {
     }));
   };
 
+  const populateFormFromMedia = (asset: MediaAsset) => {
+    setIsEditing(true);
+    setForm((prev) => ({
+      ...prev,
+      targetId: asset.id?.toString() ?? '',
+      mediaTitle: asset.title ?? '',
+      mediaDescription: asset.description ?? '',
+      mediaUrl: asset.photoUrl ?? '',
+    }));
+  };
+
   useEffect(() => {
     setForm(createEmptyForm());
     setUploadUrl('');
@@ -242,7 +253,8 @@ export function AdminApp() {
     }
     const data = new FormData();
     data.append('file', file);
-    data.append('folder', entity);
+    const folder = isMediaEntity(entity) ? mediaCategoryMap[entity as 'mediaDiagnostics' | 'mediaInterior'] : entity;
+    data.append('folder', folder);
     const existingUrl = getCurrentMediaPath(entity, form);
     const objectName = existingUrl ? getObjectName(existingUrl) : '';
     if (objectName) {
@@ -284,6 +296,8 @@ export function AdminApp() {
                 <Chip checked={entity === 'doctors'} onClick={() => setEntity('doctors')} label="Врачи" />
                 <Chip checked={entity === 'services'} onClick={() => setEntity('services')} label="Услуги" />
                 <Chip checked={entity === 'reviews'} onClick={() => setEntity('reviews')} label="Отзывы" />
+                <Chip checked={entity === 'mediaDiagnostics'} onClick={() => setEntity('mediaDiagnostics')} label="Диагностика (фото)" />
+                <Chip checked={entity === 'mediaInterior'} onClick={() => setEntity('mediaInterior')} label="Интерьер" />
               </div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 <button onClick={loadList} style={btnStyleSecondary}>Обновить списки</button>
@@ -456,7 +470,7 @@ export function AdminApp() {
                   image: toPreviewUrl(m.photoUrl),
                   raw: m,
                 }))}
-                onSelect={(item) => populateFormFromMedia(item.raw as MediaAsset, 'mediaDiagnostics')}
+                onSelect={(item) => populateFormFromMedia(item.raw as MediaAsset)}
               />
             )}
             {entity === 'mediaInterior' && (
@@ -469,7 +483,7 @@ export function AdminApp() {
                   image: toPreviewUrl(m.photoUrl),
                   raw: m,
                 }))}
-                onSelect={(item) => populateFormFromMedia(item.raw as MediaAsset, 'mediaInterior')}
+                onSelect={(item) => populateFormFromMedia(item.raw as MediaAsset)}
               />
             )}
           </div>
@@ -513,6 +527,14 @@ function buildBody(entity: EntityType, form: Record<string, string>) {
       fullDescriptionRu: null,
       fullDescriptionKk: null,
       isActive: form.isActive === 'true',
+    };
+  }
+  if (entity === 'mediaDiagnostics' || entity === 'mediaInterior') {
+    return {
+      category: entity === 'mediaDiagnostics' ? 'diagnostics' : 'interior',
+      title: form.mediaTitle,
+      description: form.mediaDescription,
+      photoUrl: form.mediaUrl || '',
     };
   }
   return {
@@ -656,6 +678,7 @@ function getObjectName(url: string) {
 function getCurrentMediaPath(entity: EntityType, form: Record<string, string>) {
   if (entity === 'doctors') return form.photoUrl;
   if (entity === 'reviews') return form.posterUrl || form.photoUrl;
+  if (entity === 'mediaDiagnostics' || entity === 'mediaInterior') return form.mediaUrl;
   return '';
 }
 
@@ -664,6 +687,8 @@ const updateFormWithUploadedUrl = (entity: EntityType, url: string, setFormFn: R
     setFormFn((prev) => ({ ...prev, photoUrl: url }));
   } else if (entity === 'reviews') {
     setFormFn((prev) => ({ ...prev, posterUrl: url }));
+  } else if (entity === 'mediaDiagnostics' || entity === 'mediaInterior') {
+    setFormFn((prev) => ({ ...prev, mediaUrl: url }));
   }
 };
 

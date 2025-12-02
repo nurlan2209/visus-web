@@ -5,9 +5,7 @@ interface PriceGroup {
   items: Array<{ name: string; price: string }>;
 }
 
-interface ServicesProps {}
-
-export function Services(_: ServicesProps) {
+export function Services() {
   const { t } = useTranslation();
   const priceGroups = (t('services.priceGroups', { returnObjects: true }) as PriceGroup[]) ?? [];
   const priceHeaders = t('services.tableHeaders', { returnObjects: true }) as { name: string; price: string };
@@ -21,7 +19,7 @@ export function Services(_: ServicesProps) {
             <h2 className="section-title">{t('services.title')}</h2>
           </div>
           <p className="section-subtitle">{t('services.subtitle')}</p>
-      </div>
+        </div>
         <div className="services-price-list">
           {priceGroups.map((group, index) => (
             <details className="services-accordion" key={group.title} open={index === 0}>
