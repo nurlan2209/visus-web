@@ -1,0 +1,120 @@
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+interface HeaderProps {
+  onBook: () => void;
+}
+
+export function Header({ onBook }: HeaderProps) {
+  const { t, i18n } = useTranslation();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const navItems = useMemo(
+    () => [
+      { href: '#services', label: t('nav.services') },
+      { href: '#diagnostics', label: t('nav.diagnostics') },
+      { href: '#doctors', label: t('nav.doctors') },
+      { href: '#gallery', label: t('nav.gallery') },
+      { href: '#reviews', label: t('nav.reviews') },
+      { href: '#contacts', label: t('nav.contacts') },
+    ],
+    [t]
+  );
+
+  const changeLanguage = (lng: 'ru' | 'kk') => {
+    i18n.changeLanguage(lng);
+    setMobileOpen(false);
+  };
+
+  return (
+    <header className={`header ${mobileOpen ? 'header--open' : ''}`}>
+      <div className="container header-inner">
+        <div className="logo-group">
+          <div className="logo-mark" aria-hidden="true" />
+          <div className="logo-text">
+            <div className="logo-text-main">VISUS</div>
+            <div className="logo-text-sub">{t('header.subtitle')}</div>
+          </div>
+        </div>
+
+        <nav className="nav" aria-label="Навигация по секциям">
+          {navItems.map((item) => (
+            <a key={item.href} href={item.href}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+
+        <div className="header-cta">
+          <div className="lang-switcher" aria-label="Выбор языка">
+            <button
+              className={i18n.language === 'ru' ? 'lang-btn lang-btn--active' : 'lang-btn'}
+              onClick={() => changeLanguage('ru')}
+            >
+              {t('languages.ru')}
+            </button>
+            <button
+              className={i18n.language === 'kk' ? 'lang-btn lang-btn--active' : 'lang-btn'}
+              onClick={() => changeLanguage('kk')}
+            >
+              {t('languages.kk')}
+            </button>
+          </div>
+
+          <div className="header-phone">
+            <a href="tel:+77001234567">{t('header.phone')}</a>
+            <span>{t('header.hours')}</span>
+          </div>
+          <button className="btn btn-primary" onClick={onBook}>
+            {t('header.cta')}
+          </button>
+          <button
+            className="hamburger"
+            aria-label="Меню"
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((prev) => !prev)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
+      </div>
+
+      {mobileOpen && (
+        <div className="mobile-nav">
+          <nav>
+            {navItems.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={() => setMobileOpen(false)}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+          <div className="mobile-nav-actions">
+            <div className="lang-switcher">
+              <button
+                className={i18n.language === 'ru' ? 'lang-btn lang-btn--active' : 'lang-btn'}
+                onClick={() => changeLanguage('ru')}
+              >
+                {t('languages.ru')}
+              </button>
+              <button
+                className={i18n.language === 'kk' ? 'lang-btn lang-btn--active' : 'lang-btn'}
+                onClick={() => changeLanguage('kk')}
+              >
+                {t('languages.kk')}
+              </button>
+            </div>
+            <button className="btn btn-primary" onClick={() => { onBook(); setMobileOpen(false); }}>
+              {t('header.cta')}
+            </button>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+}
