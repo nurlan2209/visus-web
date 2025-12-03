@@ -10,6 +10,8 @@ interface AboutProps {
 export function About({ apiBaseUrl, onBook }: AboutProps) {
   const { t } = useTranslation();
   const facts = t('about.facts', { returnObjects: true }) as FactItem[];
+  const highlights =
+    (t('about.highlights', { returnObjects: true }) as Array<{ title: string; text: string; tag?: string }>) ?? [];
   const [photos, setPhotos] = useState<MediaAsset[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightbox, setLightbox] = useState<MediaAsset | null>(null);
@@ -114,6 +116,17 @@ export function About({ apiBaseUrl, onBook }: AboutProps) {
                 </div>
               ))}
             </div>
+            {highlights.length > 0 && (
+              <div className="about-highlight-grid">
+                {highlights.map((item) => (
+                  <div className="about-highlight-card" key={item.title}>
+                    {item.tag && <span className="about-highlight-tag">{item.tag}</span>}
+                    <strong>{item.title}</strong>
+                    <p>{item.text}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
