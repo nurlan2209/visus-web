@@ -30,7 +30,9 @@ export function Header({ onBook }: HeaderProps) {
     <header className={`header ${mobileOpen ? 'header--open' : ''}`}>
       <div className="container header-inner">
         <div className="logo-group">
-          <div className="logo-mark" aria-hidden="true" />
+          <div className="logo-mark">
+            <img src="/assets/logo.png" alt="VISUS" />
+          </div>
           <div className="logo-text">
             <div className="logo-text-main">VISUS</div>
             <div className="logo-text-sub">{t('header.subtitle')}</div>

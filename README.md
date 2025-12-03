@@ -31,7 +31,7 @@
 - Backend: `cd backend && uvicorn app.main:app --reload` (нужен Python 3.12+, переменные окружения как в `.env`). Adminer в dev доступен на http://localhost:5173/adminer (или http://localhost:8081).
 
 ## Что внутри
-- Фронтенд: компоненты `Header`, `Hero`, `About`, `Services`, `Diagnostics`, `Doctors`, `Gallery`, `Reviews`, `Contacts`, `Footer` + модалка записи. Все русские строки вынесены в `frontend/src/i18n/{ru,kk}/common.json`. Кнопки «Записаться» и CTA открывают модалку с WhatsApp/телефон/формой POST `/api/requests/callback`.
+- Фронтенд: секции `Header`, `Hero`, `About`, `Services`, `Diagnostics`, `Doctors`, `Reviews`, `Contacts` (включает футер) + модалка записи и админ-панель. Все русские строки вынесены в `frontend/src/i18n/{ru,kk}/common.json`. Кнопки «Записаться» и CTA открывают модалку с WhatsApp/телефон/формой POST `/api/requests/callback`.
 - Блок «Отзывы» грузится с бэкенда `GET /api/reviews`, есть запасные данные на случай ошибки.
 - Бэкенд: FastAPI + SQLAlchemy, сущности `Doctor`, `ServiceItem`, `Review`, `CallbackRequest`, базовые сиды и CRUD/загрузка в `/api/admin/*` (Basic Auth). Медиа по умолчанию хранятся локально (папка `storage/` → `/app/storage`, отдаются по `/media/*`). Можно вернуть S3-совместимое хранилище через `STORAGE_MODE`.
 - Документация API: http://localhost:8080/docs, JSON-схема http://localhost:8080/openapi.json.

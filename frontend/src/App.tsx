@@ -4,8 +4,6 @@ import { BookingModal } from './components/BookingModal';
 import { Contacts } from './components/Contacts';
 import { Diagnostics } from './components/Diagnostics';
 import { Doctors } from './components/Doctors';
-import { Footer } from './components/Footer';
-import { Gallery } from './components/Gallery';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { Reviews } from './components/Reviews';
@@ -33,15 +31,13 @@ function App() {
       <Header onBook={openBooking} />
       <main>
         <Hero onBook={openBooking} />
-        <About apiBaseUrl={API_BASE_URL} />
+        <About apiBaseUrl={API_BASE_URL} onBook={openBooking} />
         <Services />
         <Diagnostics apiBaseUrl={API_BASE_URL} />
         <Doctors apiBaseUrl={API_BASE_URL} />
-        <Gallery onBook={openBooking} />
         <Reviews apiBaseUrl={API_BASE_URL} />
         <Contacts />
       </main>
-      <Footer />
       <BookingModal
         isOpen={isBookingOpen}
         onClose={closeBooking}

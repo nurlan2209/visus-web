@@ -193,15 +193,26 @@
     "fallbackTag": "реальный пациент VISUS"
   },
   "contacts": {
-    "kicker": "Контакты",
-    "title": "Как нас найти",
     "subtitle": "Мы находимся в удобном месте города. Запишитесь заранее, чтобы выбрать комфортное время приёма.",
     "addressTitle": "Центр охраны зрения VISUS",
     "address": "г. Астана, улица Керей, Жанибек хандар, 40",
     "phoneLabel": "Можно звонить и писать в мессенджеры",
     "hours": "Ежедневно с 09:00 до 20:00",
     "socials": "Instagram, WhatsApp, 2GIS — сюда можно добавить реальные ссылки.",
-    "mapPlaceholder": "Здесь будет интерактивная карта с отметкой «VISUS — центр охраны зрения» по адресу: г. Астана, улица Керей, Жанибек хандар, 40."
+    "mapPlaceholder": "Здесь будет интерактивная карта с отметкой «VISUS — центр охраны зрения» по адресу: г. Астана, улица Керей, Жанибек хандар, 40.",
+    "email": "hello@visus.kz",
+    "brandTitle": "VISUS — центр охраны зрения",
+    "menuTitle": "Меню",
+    "contactTitle": "Контакты",
+    "addressTitleShort": "Адрес",
+    "hoursTitleShort": "График работы",
+    "actions": [
+      { "label": "Instagram", "href": "https://instagram.com/visus", "icon": "instagram" },
+      { "label": "TikTok", "href": "https://tiktok.com/@visus", "icon": "tiktok" },
+      { "label": "YouTube", "href": "https://youtube.com/", "icon": "youtube" },
+      { "label": "WhatsApp", "href": "https://wa.me/77001234567", "icon": "whatsapp" }
+    ],
+    "socialTitle": "Мы на связи"
   },
   "footer": {
     "copyright": "© 2025 VISUS — центр охраны зрения. Все права защищены.",

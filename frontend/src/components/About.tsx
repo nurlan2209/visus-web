@@ -4,9 +4,10 @@ import type { FactItem, MediaAsset } from '../types';
 
 interface AboutProps {
   apiBaseUrl: string;
+  onBook: () => void;
 }
 
-export function About({ apiBaseUrl }: AboutProps) {
+export function About({ apiBaseUrl, onBook }: AboutProps) {
   const { t } = useTranslation();
   const facts = t('about.facts', { returnObjects: true }) as FactItem[];
   const [photos, setPhotos] = useState<MediaAsset[]>([]);
@@ -130,6 +131,23 @@ export function About({ apiBaseUrl }: AboutProps) {
           </div>
         </div>
       )}
+
+      <div className="about-cta-wrapper">
+        <div className="cta-strip">
+          <div>
+            <div className="cta-strip-title">{t('gallery.ctaTitle')}</div>
+            <div className="cta-strip-text">{t('gallery.ctaText')}</div>
+          </div>
+          <div className="cta-strip-actions">
+            <button className="btn-light" onClick={onBook}>
+              {t('gallery.actions.book')}
+            </button>
+            <button className="btn-ghost" onClick={onBook}>
+              {t('gallery.actions.whatsapp')}
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
