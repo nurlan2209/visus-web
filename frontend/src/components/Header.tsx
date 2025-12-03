@@ -37,6 +37,16 @@ export function Header({ onBook }: HeaderProps) {
             <div className="logo-text-main">VISUS</div>
             <div className="logo-text-sub">{t('header.subtitle')}</div>
           </div>
+          <button
+            className="hamburger"
+            aria-label="Меню"
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((prev) => !prev)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
         </div>
 
         <nav className="nav" aria-label="Навигация по секциям">
@@ -48,6 +58,15 @@ export function Header({ onBook }: HeaderProps) {
         </nav>
 
         <div className="header-cta">
+          <div className="header-phone">
+            <a href="tel:+77775136969">{t('header.phone')}</a>
+            <span>{t('header.hours')}</span>
+          </div>
+        </div>
+      </div>
+
+      {mobileOpen && (
+        <div className="mobile-nav">
           <div className="lang-switcher" aria-label="Выбор языка">
             <button
               className={i18n.language === 'ru' ? 'lang-btn lang-btn--active' : 'lang-btn'}
@@ -62,29 +81,6 @@ export function Header({ onBook }: HeaderProps) {
               {t('languages.kk')}
             </button>
           </div>
-
-          <div className="header-phone">
-            <a href="tel:+77775136969">{t('header.phone')}</a>
-            <span>{t('header.hours')}</span>
-          </div>
-          <button className="btn btn-primary" onClick={onBook}>
-            {t('header.cta')}
-          </button>
-          <button
-            className="hamburger"
-            aria-label="Меню"
-            aria-expanded={mobileOpen}
-            onClick={() => setMobileOpen((prev) => !prev)}
-          >
-            <span />
-            <span />
-            <span />
-          </button>
-        </div>
-      </div>
-
-      {mobileOpen && (
-        <div className="mobile-nav">
           <nav>
             {navItems.map((item) => (
               <a
@@ -97,20 +93,6 @@ export function Header({ onBook }: HeaderProps) {
             ))}
           </nav>
           <div className="mobile-nav-actions">
-            <div className="lang-switcher">
-              <button
-                className={i18n.language === 'ru' ? 'lang-btn lang-btn--active' : 'lang-btn'}
-                onClick={() => changeLanguage('ru')}
-              >
-                {t('languages.ru')}
-              </button>
-              <button
-                className={i18n.language === 'kk' ? 'lang-btn lang-btn--active' : 'lang-btn'}
-                onClick={() => changeLanguage('kk')}
-              >
-                {t('languages.kk')}
-              </button>
-            </div>
             <button className="btn btn-primary" onClick={() => { onBook(); setMobileOpen(false); }}>
               {t('header.cta')}
             </button>
