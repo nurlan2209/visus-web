@@ -13,8 +13,8 @@ import { AdminApp } from './admin/AdminApp';
 const API_BASE_URL =
   import.meta.env.VITE_API_URL ??
   (typeof window !== 'undefined' ? `${window.location.origin}/api` : 'http://localhost:8080/api');
-const PHONE_LINK = '+77001234567';
-const WHATSAPP_LINK = 'https://wa.me/77001234567';
+const PHONE_LINK = '+77775136969';
+const WHATSAPP_LINK = 'https://wa.me/77775136969';
 
 function App() {
   if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin')) {

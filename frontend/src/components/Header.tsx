@@ -31,7 +31,7 @@ export function Header({ onBook }: HeaderProps) {
       <div className="container header-inner">
         <div className="logo-group">
           <div className="logo-mark">
-            <img src="/assets/logo.png" alt="VISUS" />
+            <img src="/assets/logo_black.png" alt="VISUS" />
           </div>
           <div className="logo-text">
             <div className="logo-text-main">VISUS</div>
@@ -64,7 +64,7 @@ export function Header({ onBook }: HeaderProps) {
           </div>
 
           <div className="header-phone">
-            <a href="tel:+77001234567">{t('header.phone')}</a>
+            <a href="tel:+77775136969">{t('header.phone')}</a>
             <span>{t('header.hours')}</span>
           </div>
           <button className="btn btn-primary" onClick={onBook}>

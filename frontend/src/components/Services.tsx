@@ -21,8 +21,8 @@ export function Services() {
           <p className="section-subtitle">{t('services.subtitle')}</p>
         </div>
         <div className="services-price-list">
-          {priceGroups.map((group, index) => (
-            <details className="services-accordion" key={group.title} open={index === 0}>
+          {priceGroups.map((group) => (
+            <details className="services-accordion" key={group.title}>
               <summary>{group.title}</summary>
               <div className="services-table">
                 <table>

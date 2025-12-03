@@ -29,7 +29,7 @@ export function Contacts() {
     {
       title: t('contacts.contactTitle'),
       items: [
-        { label: t('header.phone'), href: 'tel:+77001234567' },
+        { label: t('header.phone'), href: 'tel:+77775136969' },
         { label: t('contacts.email'), href: 'mailto:hello@visus.kz' },
       ],
     },
@@ -107,7 +107,6 @@ export function Contacts() {
         <div className="contact-footer-links">
           <a href="#about">{t('footer.links.about')}</a>
           <a href="#services">{t('footer.links.services')}</a>
-          <a href="#contacts">{t('footer.links.contacts')}</a>
         </div>
       </div>
     </section>
