@@ -44,13 +44,11 @@ export function Hero({ onBook }: HeroProps) {
 
         <div className="hero-media">
           <div className="hero-card">
-            <div className="hero-image-main" />
-            <div className="hero-image-hover" />
-            <div className="hero-card-overlay" />
-            <div className="hero-card-inner">
-              <div>
-              </div>
+            <div className="hero-card-brand">
+              <img src="/assets/logo_black_w.png" alt="VISUS" />
             </div>
+            <img src="/assets/photo1.png" alt={t('hero.cardAlt', { defaultValue: 'Пациент VISUS' })} className="hero-card-photo hero-card-photo-main" />
+            <img src="/assets/photo2.png" alt="" aria-hidden="true" className="hero-card-photo hero-card-photo-hover" />
           </div>
         </div>
       </div>

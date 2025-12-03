@@ -78,7 +78,6 @@ export function About({ apiBaseUrl, onBook }: AboutProps) {
             <div className="section-kicker">{t('about.kicker')}</div>
             <h2 className="section-title">{t('about.title')}</h2>
           </div>
-          <p className="section-subtitle">{t('about.subtitle')}</p>
         </div>
 
         <div className="about-grid">

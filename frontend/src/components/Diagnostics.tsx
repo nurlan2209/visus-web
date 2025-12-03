@@ -12,7 +12,8 @@ export function Diagnostics({ apiBaseUrl }: DiagnosticsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [lightbox, setLightbox] = useState<MediaAsset | null>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
-  const items = t('diagnostics.list', { returnObjects: true }) as string[];
+  const items = t('diagnostics.list', { returnObjects: true }) as Array<{ title: string; text: string }>;
+  const benefits = t('diagnostics.benefits', { returnObjects: true }) as Array<{ title: string; text: string }> | undefined;
   const mediaBase =
     import.meta.env.VITE_MEDIA_URL ??
     (import.meta.env.VITE_API_URL
@@ -77,7 +78,6 @@ export function Diagnostics({ apiBaseUrl }: DiagnosticsProps) {
             <div className="section-kicker">{t('diagnostics.kicker')}</div>
             <h2 className="section-title">{t('diagnostics.title')}</h2>
           </div>
-          <p className="section-subtitle">{t('diagnostics.subtitle')}</p>
         </div>
 
         <div className="diag-grid">
@@ -107,12 +107,25 @@ export function Diagnostics({ apiBaseUrl }: DiagnosticsProps) {
             <h3>{t('diagnostics.cardTitle')}</h3>
             <ul className="diag-list">
               {items.map((item, index) => (
-                <li key={item}>
+                <li key={item.title}>
                   <span>{index + 1}</span>
-                  <p>{item}</p>
+                  <div>
+                    <strong>{item.title}</strong>
+                    <p>{item.text}</p>
+                  </div>
                 </li>
               ))}
             </ul>
+            {benefits && benefits.length > 0 && (
+              <div className="diag-benefits">
+                {benefits.map((benefit) => (
+                  <div key={benefit.title}>
+                    <strong>{benefit.title}</strong>
+                    <p>{benefit.text}</p>
+                  </div>
+                ))}
+              </div>
+            )}
             <p className="diag-note">{t('diagnostics.note')}</p>
           </aside>
         </div>
