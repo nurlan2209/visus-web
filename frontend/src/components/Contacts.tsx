@@ -1,74 +1,113 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+
+interface ActionLink {
+  label: string;
+  href: string;
+  icon?: string;
+}
+
+interface ContactItem {
+  label: string;
+  href?: string;
+}
 
 export function Contacts() {
   const { t } = useTranslation();
-  const [mapError, setMapError] = useState(false);
+  const actions = (t('contacts.actions', { returnObjects: true }) as ActionLink[]) ?? [];
+  const navItems = useMemo(
+    () => [
+      { href: '#services', label: t('nav.services') },
+      { href: '#diagnostics', label: t('nav.diagnostics') },
+      { href: '#doctors', label: t('nav.doctors') },
+      { href: '#reviews', label: t('nav.reviews') },
+    ],
+    [t]
+  );
+
+  const contactColumns: { title: string; items: ContactItem[] }[] = [
+    {
+      title: t('contacts.contactTitle'),
+      items: [
+        { label: t('header.phone'), href: 'tel:+77001234567' },
+        { label: t('contacts.email'), href: 'mailto:hello@visus.kz' },
+      ],
+    },
+    {
+      title: t('contacts.addressTitleShort'),
+      items: [{ label: t('contacts.address') }],
+    },
+    {
+      title: t('contacts.hoursTitleShort'),
+      items: [{ label: t('contacts.hours') }],
+    },
+  ];
 
   return (
-    <section id="contacts" className="section--green">
-      <div className="container">
-        <div className="section-header">
-          <div>
-            <div className="section-kicker">{t('contacts.kicker')}</div>
-            <h2 className="section-title">{t('contacts.title')}</h2>
+    <section id="contacts" className="contact-footer">
+      <div className="contact-footer-inner container">
+        <div className="contact-brand">
+          <img src="/assets/logo.png" alt="VISUS" className="contact-logo" />
+          <div className="contact-brand-text">
+            <h3>{t('contacts.brandTitle')}</h3>
+            <p>{t('contacts.subtitle')}</p>
           </div>
-          <p className="section-subtitle contacts-subtitle">{t('contacts.subtitle')}</p>
         </div>
 
-        <div className="contacts-grid">
-          <div className="contacts-block">
-            <div className="contacts-item">
-              <div className="contacts-label">Адрес</div>
-              <strong>{t('contacts.addressTitle')}</strong>
-              <span>{t('contacts.address')}</span>
-            </div>
+        <div className="contact-column">
+          <div className="contact-column-title">{t('contacts.menuTitle')}</div>
+          <ul>
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-            <div className="contacts-item">
-              <div className="contacts-label">Телефон</div>
-              <strong>
-                <a href="tel:+77001234567">{t('header.phone')}</a>
-              </strong>
-              <span>{t('contacts.phoneLabel')}</span>
-            </div>
-
-            <div className="contacts-item">
-              <div className="contacts-label">Режим работы</div>
-              <span>{t('contacts.hours')}</span>
-            </div>
-
-            <div className="contacts-item">
-              <div className="contacts-label">Социальные сети</div>
-              <span>{t('contacts.socials')}</span>
-            </div>
+        {contactColumns.map((column) => (
+          <div className="contact-column" key={column.title}>
+            <div className="contact-column-title">{column.title}</div>
+            <ul>
+              {column.items.map((item) => (
+                <li key={item.label}>
+                  {item.href ? (
+                    <a href={item.href}>{item.label}</a>
+                  ) : (
+                    <span>{item.label}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
           </div>
+        ))}
+      </div>
 
-          <div className="contacts-map">
-            {!mapError && (
-              <iframe
-                title="Карта VISUS"
-                src="https://makemap.2gis.ru/widget?data=eJw1j0FrwzAMhf-LdjUlSpzGCey60sOgp21s9BBqdTM4kXFcWBvy36c4zBeZ96RPTzNwtBTJHogHStHRBN3XDOkeCDp4oT7dIoGCEDlQTNkX2yW_-m-Df9iP12dpsDRdogvJ8SiGCBf2HOX7VJQGr6Uoj-No6Rc6LP7fouB7W3zP2G3rid2YMkHCubFPOVSDO60ro1WNOyxMu2_OMu6s8LCql7OCoQ8nntwWYQbfJ-hyc6NNVayl1UaBX-1Mw6ZCXZetxhYlHvMgsL1Q5RT2_v2HyH9mNcUbLX87cFvz"
-                loading="lazy"
-                className="contacts-map-embed contacts-map-embed--full"
-                sandbox="allow-modals allow-forms allow-scripts allow-same-origin allow-popups allow-top-navigation-by-user-activation"
-                onError={() => setMapError(true)}
-              />
-            )}
-            {mapError && (
-              <div className="contacts-map-fallback">
-                <div>Карта 2ГИС временно недоступна.</div>
-                <a
-                  href="https://go.2gis.com/35yxo"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="btn btn-light"
-                  style={{ marginTop: 10 }}
-                >
-                  Открыть в 2ГИС
-                </a>
-              </div>
-            )}
-          </div>
+      <div className="contact-footer-actions container">
+        {actions.map((action) => {
+          const icon = action.icon ?? 'whatsapp';
+          const iconPath = `/assets/${icon === 'instagram' ? 'insta' : icon}.png`;
+          return (
+            <a
+              className="contact-action"
+              key={`${action.href}-${icon}`}
+              href={action.href}
+              target={action.href.startsWith('http') ? '_blank' : undefined}
+              rel="noreferrer"
+              aria-label={action.label}
+            >
+              <img src={iconPath} alt={action.label} />
+            </a>
+          );
+        })}
+      </div>
+
+      <div className="contact-footer-bottom container">
+        <div>{t('footer.copyright')}</div>
+        <div className="contact-footer-links">
+          <a href="#about">{t('footer.links.about')}</a>
+          <a href="#services">{t('footer.links.services')}</a>
+          <a href="#contacts">{t('footer.links.contacts')}</a>
         </div>
       </div>
     </section>

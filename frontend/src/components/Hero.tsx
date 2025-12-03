@@ -45,15 +45,10 @@ export function Hero({ onBook }: HeroProps) {
         <div className="hero-media">
           <div className="hero-card">
             <div className="hero-image-main" />
+            <div className="hero-image-hover" />
             <div className="hero-card-overlay" />
             <div className="hero-card-inner">
               <div>
-                <div className="hero-badge">
-                  <div className="hero-badge-icon">👁</div>
-                  {t('hero.badge')}
-                </div>
-                <div className="hero-mini-title">{t('hero.miniTitle')}</div>
-                <div className="hero-mini-text">{t('hero.miniText')}</div>
               </div>
             </div>
           </div>

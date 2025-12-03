@@ -193,15 +193,26 @@
     "fallbackTag": "VISUS-тың шынайы пациенті"
   },
   "contacts": {
-    "kicker": "Байланыс",
-    "title": "Қалай табасыз",
     "subtitle": "Қаланың ыңғайлы жерінде орналасқанбыз. Қабылдауға ыңғайлы уақыт таңдау үшін алдын ала жазылыңыз.",
     "addressTitle": "VISUS көруді қорғау орталығы",
     "address": "Астана қ., Керей, Жәнібек хандар көшесі, 40",
     "phoneLabel": "Қоңырау шалуға және мессенджерлерге жазуға болады",
     "hours": "Күн сайын 09:00-ден 20:00-ге дейін",
     "socials": "Instagram, WhatsApp, 2GIS — мұнда нақты сілтемелер болады.",
-    "mapPlaceholder": "Мына жерде картада «VISUS — көруді қорғау орталығы» белгісі болады: Астана қ., Керей, Жәнібек хандар көшесі, 40."
+    "mapPlaceholder": "Мына жерде картада «VISUS — көруді қорғау орталығы» белгісі болады: Астана қ., Керей, Жәнібек хандар көшесі, 40.",
+    "email": "hello@visus.kz",
+    "brandTitle": "VISUS — көруді қорғау орталығы",
+    "menuTitle": "Мәзір",
+    "contactTitle": "Байланыс",
+    "addressTitleShort": "Мекенжай",
+    "hoursTitleShort": "Жұмыс уақыты",
+    "actions": [
+      { "label": "Instagram", "href": "https://instagram.com/visus", "icon": "instagram" },
+      { "label": "TikTok", "href": "https://tiktok.com/@visus", "icon": "tiktok" },
+      { "label": "YouTube", "href": "https://youtube.com/", "icon": "youtube" },
+      { "label": "WhatsApp", "href": "https://wa.me/77001234567", "icon": "whatsapp" }
+    ],
+    "socialTitle": "Бізбен байланысыңыз"
   },
   "footer": {
     "copyright": "© 2025 VISUS — көруді қорғау орталығы. Барлық құқықтар қорғалған.",
