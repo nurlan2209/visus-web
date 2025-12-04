@@ -275,26 +275,38 @@
     background: rgba(255, 255, 255, 0.98);
     border-top: 1px solid rgba(226, 232, 240, 0.8);
     box-shadow: 0 12px 28px rgba(15, 31, 53, 0.08);
+    padding: 18px 20px 20px;
   }
 
   .mobile-nav nav {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 12px 20px 4px;
+    gap: 14px;
+    padding-top: 12px;
   }
 
-  .mobile-nav a {
+  .mobile-nav nav a {
     color: var(--text-main);
     font-weight: 600;
+    font-size: 17px;
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+  }
+
+  .mobile-nav nav a:last-child {
+    border-bottom: none;
+  }
+
+  .mobile-nav .lang-switcher {
+    margin-bottom: 6px;
   }
 
   .mobile-nav-actions {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px 14px;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 12px;
+    margin-top: 10px;
   }
   
   /* Hero */
@@ -1848,3 +1860,9 @@
     border-radius: 18px;
   }
 }
+    .desktop-book-btn {
+      display: none;
+    }
+    .mobile-nav .lang-switcher {
+      margin-bottom: 6px;
+    }
