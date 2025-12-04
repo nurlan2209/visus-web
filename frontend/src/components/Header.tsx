@@ -62,6 +62,9 @@ export function Header({ onBook }: HeaderProps) {
             <a href="tel:+77775136969">{t('header.phone')}</a>
             <span>{t('header.hours')}</span>
           </div>
+          <button className="btn btn-primary desktop-book-btn" onClick={onBook}>
+            {t('header.cta')}
+          </button>
         </div>
       </div>
 
