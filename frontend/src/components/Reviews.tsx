@@ -2,6 +2,16 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Review } from '../types';
 
+declare global {
+  interface Window {
+    instgrm?: {
+      Embeds?: {
+        process?: () => void;
+      };
+    };
+  }
+}
+
 interface ReviewsProps {
   apiBaseUrl: string;
 }
@@ -50,6 +60,49 @@ export function Reviews({ apiBaseUrl }: ReviewsProps) {
     load();
   }, [apiBaseUrl]);
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const hasInstagramEmbed = reviews.some((review) => review.videoUrl?.includes('instagram.com'));
+    if (!hasInstagramEmbed) return;
+
+    if (window.instgrm?.Embeds?.process) {
+      window.instgrm.Embeds.process();
+      return;
+    }
+
+    if (!document.querySelector('script[data-instagram-embed]')) {
+      const script = document.createElement('script');
+      script.src = '//www.instagram.com/embed.js';
+      script.async = true;
+      script.setAttribute('data-instagram-embed', 'true');
+      document.body.appendChild(script);
+    }
+  }, [reviews]);
+
+  const buildInstagramEmbed = (url: string) =>
+    `<blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14"></blockquote><script async src="//www.instagram.com/embed.js"></script>`;
+
+  const normalizeVideoContent = (value?: string) => {
+    if (!value) return '';
+    const trimmed = value.trim();
+    if (trimmed.startsWith('<')) {
+      return trimmed;
+    }
+    if (/instagram\.com\/(reel|p|tv)/.test(trimmed)) {
+      return buildInstagramEmbed(trimmed);
+    }
+    if (/youtube\.com|youtu\.be/.test(trimmed)) {
+      return `<iframe width="100%" height="320" src="${trimmed}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+    }
+    return trimmed;
+  };
+
+  const isEmbedHtml = (value?: string) => {
+    if (!value) return false;
+    const normalized = normalizeVideoContent(value);
+    return normalized.trim().startsWith('<');
+  };
+
   const currentText = (review: Review) =>
     i18n.language === 'kk' ? review.textKk || review.textRu : review.textRu || review.textKk;
 
@@ -76,9 +129,13 @@ export function Reviews({ apiBaseUrl }: ReviewsProps) {
         <div className="reviews-grid">
           {reviews.map((review, idx) => (
             <article className="review-card" key={review.id ?? idx}>
-              <video className="review-video" controls poster={resolveMedia(review.posterUrl)}>
-                {review.videoUrl && <source src={review.videoUrl} type="video/mp4" />}
-              </video>
+              {isEmbedHtml(review.videoUrl) ? (
+                <div className="review-embed" dangerouslySetInnerHTML={{ __html: normalizeVideoContent(review.videoUrl) }} />
+              ) : (
+                <video className="review-video" controls poster={resolveMedia(review.posterUrl)}>
+                  {review.videoUrl && <source src={review.videoUrl} type="video/mp4" />}
+                </video>
+              )}
               <div className="review-top">
                 <div>
                   <div className="review-name">{review.patientName || `${t('reviews.fallbackName')} №${idx + 1}`}</div>

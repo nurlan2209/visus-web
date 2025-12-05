@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import type { Doctor, Review, ServiceApiItem, MediaAsset } from '../types';
+import type { Doctor, Review, MediaAsset } from '../types';
 
-type EntityType = 'doctors' | 'services' | 'reviews' | 'mediaDiagnostics' | 'mediaInterior';
+type EntityType = 'doctors' | 'reviews' | 'mediaDiagnostics' | 'mediaInterior';
 
 interface UploadResponse {
   url: string;
@@ -67,7 +67,6 @@ export function AdminApp() {
   const [entity, setEntity] = useState<EntityType>('doctors');
   const [uploadUrl, setUploadUrl] = useState<string>('');
   const [doctors, setDoctors] = useState<Doctor[]>([]);
-  const [services, setServices] = useState<ServiceApiItem[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [mediaDiagnostics, setMediaDiagnostics] = useState<MediaAsset[]>([]);
   const [mediaInterior, setMediaInterior] = useState<MediaAsset[]>([]);
@@ -152,7 +151,6 @@ export function AdminApp() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (entity === 'doctors') setDoctors(data as Doctor[]);
-      if (entity === 'services') setServices(data as ServiceApiItem[]);
       if (entity === 'reviews') setReviews(data as Review[]);
       if (entity === 'mediaDiagnostics') setMediaDiagnostics(data as MediaAsset[]);
       if (entity === 'mediaInterior') setMediaInterior(data as MediaAsset[]);
@@ -172,20 +170,6 @@ export function AdminApp() {
       descriptionRu: d.descriptionRu ?? '',
       descriptionKk: d.descriptionKk ?? '',
       photoUrl: d.photoUrl ?? '',
-    }));
-  };
-
-  const populateFormFromService = (s: ServiceApiItem) => {
-    setIsEditing(true);
-    setForm((prev) => ({
-      ...prev,
-      targetId: s.id?.toString() ?? '',
-      slug: s.slug ?? '',
-      titleRu: s.titleRu ?? '',
-      titleKk: s.titleKk ?? '',
-      shortDescriptionRu: s.shortDescriptionRu ?? '',
-      shortDescriptionKk: s.shortDescriptionKk ?? '',
-      isActive: s.isActive ? 'true' : 'false',
     }));
   };
 
@@ -294,7 +278,6 @@ export function AdminApp() {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, justifyContent: 'space-between', alignItems: 'center' }}>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                 <Chip checked={entity === 'doctors'} onClick={() => setEntity('doctors')} label="Врачи" />
-                <Chip checked={entity === 'services'} onClick={() => setEntity('services')} label="Услуги" />
                 <Chip checked={entity === 'reviews'} onClick={() => setEntity('reviews')} label="Отзывы" />
                 <Chip checked={entity === 'mediaDiagnostics'} onClick={() => setEntity('mediaDiagnostics')} label="Диагностика (фото)" />
                 <Chip checked={entity === 'mediaInterior'} onClick={() => setEntity('mediaInterior')} label="Интерьер" />
@@ -341,32 +324,6 @@ export function AdminApp() {
                 </>
               )}
 
-              {entity === 'services' && (
-                <>
-                  <Field label="Slug">
-                    <input value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} style={inputStyle} />
-                  </Field>
-                  <Field label="Заголовок RU">
-                    <input value={form.titleRu} onChange={(e) => setForm({ ...form, titleRu: e.target.value })} style={inputStyle} />
-                  </Field>
-                  <Field label="Заголовок KK">
-                    <input value={form.titleKk} onChange={(e) => setForm({ ...form, titleKk: e.target.value })} style={inputStyle} />
-                  </Field>
-                  <Field label="Коротко RU">
-                    <textarea value={form.shortDescriptionRu} onChange={(e) => setForm({ ...form, shortDescriptionRu: e.target.value })} style={textareaStyle} />
-                  </Field>
-                  <Field label="Коротко KK">
-                    <textarea value={form.shortDescriptionKk} onChange={(e) => setForm({ ...form, shortDescriptionKk: e.target.value })} style={textareaStyle} />
-                  </Field>
-                  <Field label="Статус">
-                    <select value={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.value })} style={inputStyle}>
-                      <option value="true">Активно</option>
-                      <option value="false">Скрыто</option>
-                    </select>
-                  </Field>
-                </>
-              )}
-
               {entity === 'reviews' && (
                 <>
                   <Field label="Имя пациента">
@@ -381,8 +338,18 @@ export function AdminApp() {
                   <Field label="Текст KK">
                     <textarea value={form.textKk} onChange={(e) => setForm({ ...form, textKk: e.target.value })} style={textareaStyle} />
                   </Field>
-                  <Field label="Видео URL">
-                    <input value={form.videoUrl} onChange={(e) => setForm({ ...form, videoUrl: e.target.value })} style={inputStyle} />
+                  <Field label="Видео / embed">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      <textarea
+                        value={form.videoUrl}
+                        onChange={(e) => setForm({ ...form, videoUrl: e.target.value })}
+                        style={{ ...textareaStyle, minHeight: 80 }}
+                        placeholder="MP4 ссылка или embed-код Instagram/YouTube"
+                      />
+                      <small style={{ color: '#94a3b8' }}>
+                        Поддерживаются прямые mp4-ссылки и встроенные блоки (iframe, blockquote) от Instagram/YouTube.
+                      </small>
+                    </div>
                   </Field>
                   <Field label="Постер (загрузите файл или вставьте путь)">
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -433,18 +400,6 @@ export function AdminApp() {
                   raw: d,
                 }))}
                 onSelect={(item) => populateFormFromDoctor(item.raw as Doctor)}
-              />
-            )}
-            {entity === 'services' && (
-              <List
-                items={services.map((s) => ({
-                  id: s.id,
-                  title: s.titleRu,
-                  subtitle: s.slug,
-                  description: s.shortDescriptionRu,
-                  raw: s,
-                }))}
-                onSelect={(item) => populateFormFromService(item.raw as ServiceApiItem)}
               />
             )}
             {entity === 'reviews' && (
@@ -515,18 +470,6 @@ function buildBody(entity: EntityType, form: Record<string, string>) {
       descriptionRu: form.descriptionRu,
       descriptionKk: form.descriptionKk,
       photoUrl: form.photoUrl || form.posterUrl || '',
-    };
-  }
-  if (entity === 'services') {
-    return {
-      slug: form.slug,
-      titleRu: form.titleRu,
-      titleKk: form.titleKk,
-      shortDescriptionRu: form.shortDescriptionRu,
-      shortDescriptionKk: form.shortDescriptionKk,
-      fullDescriptionRu: null,
-      fullDescriptionKk: null,
-      isActive: form.isActive === 'true',
     };
   }
   if (entity === 'mediaDiagnostics' || entity === 'mediaInterior') {
@@ -696,7 +639,9 @@ function toPreviewUrl(path?: string) {
   if (!path) return '';
   if (path.startsWith('http')) return path;
   const normalized = path.replace(/^\/?media\//, '').replace(/^\/+/, '');
-  const base = typeof window !== 'undefined' ? window.location.origin.replace(/\/$/, '') : '';
+  const base =
+    import.meta.env.VITE_MEDIA_URL?.replace(/\/media\/?$/, '')?.replace(/\/$/, '') ||
+    (typeof window !== 'undefined' ? window.location.origin.replace(/\/$/, '').replace(/:5173$/, ':8080') : '');
   return `${base}/media/${normalized}`;
 }
 
