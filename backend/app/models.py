@@ -37,7 +37,7 @@ class Review(Base):
     rating = Column(Integer, default=5)
     text_ru = Column(Text, nullable=True)
     text_kk = Column(Text, nullable=True)
-    video_url = Column(String(512), nullable=True)
+    video_url = Column(Text, nullable=True)
     poster_url = Column(String(512), nullable=True)
 
 

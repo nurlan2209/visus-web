@@ -58,6 +58,20 @@ export function Header({ onBook }: HeaderProps) {
         </nav>
 
         <div className="header-cta">
+          <div className="lang-switcher lang-switcher--desktop" aria-label="Выбор языка">
+            <button
+              className={i18n.language === 'ru' ? 'lang-btn lang-btn--active' : 'lang-btn'}
+              onClick={() => changeLanguage('ru')}
+            >
+              {t('languages.ru')}
+            </button>
+            <button
+              className={i18n.language === 'kk' ? 'lang-btn lang-btn--active' : 'lang-btn'}
+              onClick={() => changeLanguage('kk')}
+            >
+              {t('languages.kk')}
+            </button>
+          </div>
           <div className="header-phone">
             <a href="tel:+77775136969">{t('header.phone')}</a>
             <span>{t('header.hours')}</span>
