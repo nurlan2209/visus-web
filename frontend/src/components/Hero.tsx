@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface HeroProps {
@@ -7,9 +8,16 @@ interface HeroProps {
 export function Hero({ onBook }: HeroProps) {
   const { t } = useTranslation();
   const stats = t('hero.stats', { returnObjects: true }) as Array<{ value: string; label: string }>;
+  const [isHeroHovering, setIsHeroHovering] = useState(false);
 
   return (
-    <section className="hero" id="hero">
+    <section className={`hero${isHeroHovering ? ' hero--hovered' : ''}`} id="hero">
+      <div
+        className="hero-hover-zone"
+        onMouseEnter={() => setIsHeroHovering(true)}
+        onMouseLeave={() => setIsHeroHovering(false)}
+        aria-hidden="true"
+      />
       <div className="container hero-inner">
         <div className="hero-surface">
           <div className="pill">

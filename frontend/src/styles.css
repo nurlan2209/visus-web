@@ -316,9 +316,32 @@
     position: relative;
     padding: 110px 0 120px;
     min-height: 82vh;
-    background: linear-gradient(90deg, rgba(247, 248, 250, 0.92) 0%, rgba(247, 248, 250, 0.78) 36%, rgba(247, 248, 250, 0.35) 72%, rgba(247, 248, 250, 0.22) 100%),
-      url('/assets/hero_back.png') center/cover no-repeat;
+    background-image: linear-gradient(90deg, rgba(247, 248, 250, 0.92) 0%, rgba(247, 248, 250, 0.78) 36%, rgba(247, 248, 250, 0.35) 72%, rgba(247, 248, 250, 0.22) 100%),
+      url('/assets/hero_back.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
     overflow: hidden;
+    z-index: 0;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(90deg, rgba(247, 248, 250, 0.92) 0%, rgba(247, 248, 250, 0.78) 36%, rgba(247, 248, 250, 0.35) 72%, rgba(247, 248, 250, 0.22) 100%),
+      url('/assets/hero_back2.png');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  .hero.hero--hovered::before {
+    opacity: 1;
   }
   
   .hero::after {
@@ -327,7 +350,7 @@
     inset: 0;
     background: radial-gradient(120% 120% at 15% 10%, rgba(255, 255, 255, 0.8), transparent 60%);
     pointer-events: none;
-    z-index: 0;
+    z-index: 1;
   }
   
   .hero-inner {
@@ -335,7 +358,17 @@
     display: grid;
     grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.8fr);
     align-items: center;
-    z-index: 1;
+    z-index: 2;
+  }
+
+  .hero-hover-zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: clamp(420px, 52vw, 640px);
+    right: 0;
+    z-index: 3;
+    cursor: pointer;
   }
   
   .hero-surface {
@@ -1225,7 +1258,8 @@
   .cta-strip {
     margin-top: 34px;
     border-radius: 40px;
-    background: linear-gradient(90deg, var(--green-main), var(--blue-main));
+    background: var(--green-main);
+    /* background: linear-gradient(90deg, var(--green-main), var(--blue-main)); */
     color: #ffffff;
     padding: 16px 22px;
     display: flex;
@@ -1470,6 +1504,10 @@
       max-width: 100%;
       padding: 32px 28px;
       transform: none;
+    }
+
+    .hero-hover-zone {
+      display: none;
     }
   
     .hero-media {
