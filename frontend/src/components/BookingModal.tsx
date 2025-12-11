@@ -8,6 +8,7 @@ interface BookingModalProps {
   apiBaseUrl: string;
   whatsappLink: string;
   phoneLink: string;
+  googleScriptUrl?: string;
 }
 
 const phoneDigits = (value: string) => value.replace(/[^\d+]/g, '');
@@ -18,7 +19,9 @@ export function BookingModal({
   apiBaseUrl,
   whatsappLink,
   phoneLink,
+  googleScriptUrl,
 }: BookingModalProps) {
+  console.log("googleScriptUrl =", googleScriptUrl);
   const { t } = useTranslation();
   const [form, setForm] = useState<CallbackPayload>({ name: '', phone: '' });
   const [submitting, setSubmitting] = useState(false);
@@ -57,21 +60,39 @@ export function BookingModal({
   };
 
   const submit = async () => {
-    if (!form.name.trim() || !form.phone.trim()) {
+    const payload = {
+      name: form.name.trim(),
+      phone: form.phone.trim(),
+    };
+
+    if (!payload.name || !payload.phone) {
       setStatus('error');
       return;
     }
     try {
       setSubmitting(true);
       setStatus('idle');
-      const response = await fetch(`${apiBaseUrl}/requests/callback`, {
+      const backendRequest = fetch(`${apiBaseUrl}/requests/callback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
+      const googleSync = googleScriptUrl
+        ? fetch(googleScriptUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          }).catch((err) => {
+            console.error('Failed to send data to Google Sheets', err);
+          })
+        : Promise.resolve();
+
+      const response = await backendRequest;
       if (!response.ok) {
         throw new Error('Failed to send');
       }
+      await googleSync;
       setStatus('success');
       setForm({ name: '', phone: '' });
     } catch (err) {

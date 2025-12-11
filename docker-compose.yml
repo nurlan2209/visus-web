@@ -37,6 +37,7 @@ services:
       args:
         - VITE_API_URL=${VITE_API_URL:-http://backend:8080/api}
         - VITE_MEDIA_URL=${VITE_MEDIA_URL:-http://backend:8080/media}
+        - VITE_GOOGLE_SCRIPT_URL=${VITE_GOOGLE_SCRIPT_URL:-}
     container_name: visus_frontend
     restart: unless-stopped
     depends_on:
@@ -44,6 +45,7 @@ services:
     environment:
       VITE_API_URL: ${VITE_API_URL:-http://backend:8080/api}
       VITE_MEDIA_URL: ${VITE_MEDIA_URL:-http://backend:8080/media}
+      VITE_GOOGLE_SCRIPT_URL: ${VITE_GOOGLE_SCRIPT_URL:-}
     ports:
       - "5173:80"
       - "80:80"
