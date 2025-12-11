@@ -21,7 +21,6 @@ export function BookingModal({
   phoneLink,
   googleScriptUrl,
 }: BookingModalProps) {
-  console.log("googleScriptUrl =", googleScriptUrl);
   const { t } = useTranslation();
   const [form, setForm] = useState<CallbackPayload>({ name: '', phone: '' });
   const [submitting, setSubmitting] = useState(false);
