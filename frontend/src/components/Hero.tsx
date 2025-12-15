@@ -41,6 +41,8 @@ export function Hero({ onBook }: HeroProps) {
             <div className="hero-note">
               <span>i</span>
               {t('hero.note')}
+              <span>i</span>
+              {t('hero.note2')}
             </div>
             <div className="hero-stats">
               {stats.map((stat) => (
