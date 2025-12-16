@@ -228,6 +228,7 @@
     "addressTitleShort": "Мекенжай",
     "hoursTitleShort": "Жұмыс уақыты",
     "actions": [
+      { "label": "2GIS", "href": "https://go.2gis.com/Rrqm1", "icon": "2gis" },
       { "label": "Instagram", "href": "https://instagram.com/visus.ast", "icon": "instagram" },
       { "label": "TikTok", "href": "https://tiktok.com/@visus.ast", "icon": "tiktok" },
       { "label": "YouTube", "href": "https://youtube.com/@visus.astana?si=f1FYpJ5-De2WrWvf", "icon": "youtube" },

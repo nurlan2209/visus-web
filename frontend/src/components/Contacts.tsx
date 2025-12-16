@@ -87,16 +87,20 @@ export function Contacts() {
         {actions.map((action) => {
           const icon = action.icon ?? 'whatsapp';
           const iconPath = `/assets/${icon === 'instagram' ? 'insta' : icon}.png`;
+          const isExternal = /^https?:\/\//.test(action.href);
           return (
             <a
               className="contact-action"
               key={`${action.href}-${icon}`}
               href={action.href}
-              target={action.href.startsWith('http') ? '_blank' : undefined}
-              rel="noreferrer"
+              target={isExternal ? '_blank' : undefined}
+              rel={isExternal ? 'noreferrer noopener' : undefined}
               aria-label={action.label}
             >
-              <img src={iconPath} alt={action.label} />
+              <span className="contact-action-icon">
+                <img src={iconPath} alt={action.label} />
+              </span>
+              <span className="contact-action-label">{action.label}</span>
             </a>
           );
         })}
