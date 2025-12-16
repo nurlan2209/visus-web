@@ -38,6 +38,14 @@ export function Reviews({ apiBaseUrl }: ReviewsProps) {
     return '/media';
   };
   const mediaBase = computeMediaBase();
+  const resolveMedia = (path?: string) => {
+    if (!path) return '';
+    if (/^(https?:)?\/\//i.test(path) || path.startsWith('/')) {
+      return path;
+    }
+    const base = mediaBase.replace(/\/$/, '');
+    return `${base}/${path.replace(/^\/+/, '')}`;
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -106,14 +114,11 @@ export function Reviews({ apiBaseUrl }: ReviewsProps) {
   const currentText = (review: Review) =>
     i18n.language === 'kk' ? review.textKk || review.textRu : review.textRu || review.textKk;
 
-  const resolveMedia = (url?: string) => {
-    if (!url) return '/assets/placeholder.png';
-    if (url.startsWith('http')) return url;
-    const normalized = url.replace(/^\/?media\//, '').replace(/^\/+/, '');
-    const finalUrl = `${mediaBase}/${normalized.replace(/^media\//, '')}`;
-    console.debug('[Reviews] resolve media', url, '->', finalUrl);
-    return finalUrl;
+  const shouldUsePoster = (value?: string) => {
+    if (!value) return false;
+    return !value.trim().toLowerCase().includes('placeholder.png');
   };
+
 
   return (
     <section id="reviews" className="section--soft">
@@ -132,7 +137,11 @@ export function Reviews({ apiBaseUrl }: ReviewsProps) {
               {isEmbedHtml(review.videoUrl) ? (
                 <div className="review-embed" dangerouslySetInnerHTML={{ __html: normalizeVideoContent(review.videoUrl) }} />
               ) : (
-                <video className="review-video" controls poster={resolveMedia(review.posterUrl)}>
+                <video
+                  className="review-video"
+                  controls
+                  poster={shouldUsePoster(review.posterUrl) ? resolveMedia(review.posterUrl) : undefined}
+                >
                   {review.videoUrl && <source src={review.videoUrl} type="video/mp4" />}
                 </video>
               )}

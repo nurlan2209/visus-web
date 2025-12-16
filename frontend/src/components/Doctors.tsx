@@ -22,6 +22,14 @@ export function Doctors({ apiBaseUrl }: DoctorsProps) {
     return '/media';
   };
   const mediaBase = computeMediaBase();
+  const resolveMedia = (path?: string) => {
+    if (!path) return '';
+    if (/^(https?:)?\/\//i.test(path) || path.startsWith('/')) {
+      return path;
+    }
+    const base = mediaBase.replace(/\/$/, '');
+    return `${base}/${path.replace(/^\/+/, '')}`;
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -57,14 +65,7 @@ export function Doctors({ apiBaseUrl }: DoctorsProps) {
     return doctor.descriptionRu || doctor.descriptionKk;
   };
 
-  const resolveMedia = (url?: string) => {
-    if (!url) return '/assets/placeholder.png';
-    if (url.startsWith('http')) return url;
-    const normalized = url.replace(/^\/?media\//, '').replace(/^\/+/, '');
-    const finalUrl = `${mediaBase}/${normalized.replace(/^media\//, '')}`;
-    console.debug('[Doctors] resolve media', url, '->', finalUrl);
-    return finalUrl;
-  };
+  
 
   return (
     <section id="doctors" className="section--soft">
@@ -84,7 +85,7 @@ export function Doctors({ apiBaseUrl }: DoctorsProps) {
                   src={resolveMedia(doctor.photoUrl)}
                   alt={doctor.name}
                   onError={(e) => {
-                    e.currentTarget.src = '/assets/placeholder.png';
+                    e.currentTarget.src = '';
                   }}
                 />
               </div>

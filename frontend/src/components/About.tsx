@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { FactItem, MediaAsset } from '../types';
 
@@ -6,6 +6,11 @@ interface AboutProps {
   apiBaseUrl: string;
   onBook: () => void;
 }
+
+const FALLBACK_ABOUT_PHOTOS: MediaAsset[] = [
+  { id: -1, category: 'about', title: 'VISUS', photoUrl: '/assets/photo1.png' },
+  { id: -2, category: 'about', title: 'VISUS', photoUrl: '/assets/photo2.png' },
+];
 
 export function About({ apiBaseUrl, onBook }: AboutProps) {
   const { t } = useTranslation();
@@ -21,6 +26,14 @@ export function About({ apiBaseUrl, onBook }: AboutProps) {
     (import.meta.env.VITE_API_URL
       ? `${new URL(import.meta.env.VITE_API_URL).origin.replace(/\/$/, '')}/media`
       : `${window.location.origin.replace(/\/$/, '')}/media`);
+  const resolveMedia = (path?: string) => {
+    if (!path) return '';
+    if (/^(https?:)?\/\//i.test(path) || path.startsWith('/')) {
+      return path;
+    }
+    const base = mediaBase.replace(/\/$/, '');
+    return `${base}/${path.replace(/^\/+/, '')}`;
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -46,16 +59,7 @@ export function About({ apiBaseUrl, onBook }: AboutProps) {
     load();
   }, [apiBaseUrl]);
 
-  const resolveMedia = (url?: string) => {
-    if (!url) return '/assets/placeholder.png';
-    if (url.startsWith('http')) return url;
-    return `${mediaBase}/${url.replace(/^\/?media\//, '').replace(/^\/+/, '')}`;
-  };
-
-  const displayPhotos = useMemo(() => {
-    if (photos.length) return photos;
-    return [{ id: -1, photoUrl: '/assets/placeholder.png', title: '', description: '', category: 'interior' }];
-  }, [photos]);
+  const displayPhotos = photos.length ? photos : FALLBACK_ABOUT_PHOTOS;
 
   const showPrev = () => setCurrentIndex((prev) => (prev - 1 + displayPhotos.length) % displayPhotos.length);
   const showNext = () => setCurrentIndex((prev) => (prev + 1) % displayPhotos.length);
@@ -70,7 +74,7 @@ export function About({ apiBaseUrl, onBook }: AboutProps) {
     setTouchStart(null);
   };
 
-  const currentPhoto = displayPhotos[currentIndex];
+  const currentPhoto = displayPhotos[currentIndex % displayPhotos.length];
 
   return (
     <section id="about">
