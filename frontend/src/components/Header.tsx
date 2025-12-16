@@ -14,7 +14,6 @@ export function Header({ onBook }: HeaderProps) {
       { href: '#services', label: t('nav.services') },
       { href: '#diagnostics', label: t('nav.diagnostics') },
       { href: '#doctors', label: t('nav.doctors') },
-      { href: '#gallery', label: t('nav.gallery') },
       { href: '#reviews', label: t('nav.reviews') },
       { href: '#contacts', label: t('nav.contacts') },
     ],
